@@ -840,19 +840,19 @@ HaGaugeElement.styles = i$5 `
     .levels-base {
       fill: none;
       stroke: var(--primary-background-color);
-      stroke-width: 12;
+      stroke-width: 7.2;
       stroke-linecap: butt;
     }
 
     .level {
       fill: none;
-      stroke-width: 12;
+      stroke-width: 7.2;
       stroke-linecap: butt;
     }
 
     .value {
       fill: none;
-      stroke-width: 12;
+      stroke-width: 7.2;
       stroke: var(--gauge-color);
       stroke-linecap: butt;
       transition: stroke-dashoffset 1s ease 0s;
@@ -1959,7 +1959,7 @@ HaGaugeCard.styles = i$5 `
       width: 100%;
       font-size: var(--ha-font-size-m, 1rem);
       line-height: var(--ha-line-height-expanded, 1.5);
-      margin: 0;
+      margin: -4px 0 0;
       text-align: center;
       box-sizing: border-box;
       overflow: hidden;
@@ -1994,7 +1994,7 @@ HaGaugeCard = __decorate([
  * Registers the card with Home Assistant's custom card registry so it appears
  * in the card picker with a proper name and preview icon.
  */
-const CARD_VERSION = "1.0.2";
+const CARD_VERSION = "1.0.3";
 // Register card with Home Assistant's custom card registry
 window.customCards =
     window.customCards || [];

@@ -386,7 +386,7 @@ export class HaGaugeCard extends LitElement implements LovelaceCard {
       width: 100%;
       font-size: var(--ha-font-size-m, 1rem);
       line-height: var(--ha-line-height-expanded, 1.5);
-      margin: 0;
+      margin: -4px 0 0;
       text-align: center;
       box-sizing: border-box;
       overflow: hidden;
