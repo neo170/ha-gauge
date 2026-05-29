@@ -9,13 +9,13 @@ It serves as a starting point for visual customisation without touching the HA c
 
 1. Open HACS in your Home Assistant instance.
 2. Go to **Frontend** → **⋮** → **Custom repositories**.
-3. Add `https://github.com/YOUR_GITHUB_USERNAME/ha-gauge` as a **Lovelace** repository.
+3. Add `https://github.com/neo170/ha-gauge` as a **Lovelace** repository.
 4. Install **HA Gauge** from HACS.
 5. Add the resource (HACS does this automatically for most setups).
 
 ## Manual installation
 
-1. Download `dist/ha-gauge.js` from the [latest release](https://github.com/YOUR_GITHUB_USERNAME/ha-gauge/releases/latest).
+1. Download `dist/ha-gauge.js` from the [latest release](https://github.com/neo170/ha-gauge/releases/latest).
 2. Copy it to `config/www/ha-gauge.js`.
 3. Add a resource entry in your Lovelace configuration:
 

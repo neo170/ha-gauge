@@ -19,7 +19,7 @@ import "./ha-gauge-element";
   description:
     "A gauge card – functionally identical to the built-in gauge card, ready for visual customisation.",
   preview: true,
-  documentationURL: "https://github.com/YOUR_GITHUB_USERNAME/ha-gauge",
+  documentationURL: "https://github.com/neo170/ha-gauge",
 });
 
 console.info(
