@@ -1994,7 +1994,7 @@ HaGaugeCard = __decorate([
  * Registers the card with Home Assistant's custom card registry so it appears
  * in the card picker with a proper name and preview icon.
  */
-const CARD_VERSION = "1.0.1";
+const CARD_VERSION = "1.0.2";
 // Register card with Home Assistant's custom card registry
 window.customCards =
     window.customCards || [];
