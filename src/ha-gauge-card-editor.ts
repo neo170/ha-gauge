@@ -40,6 +40,9 @@ const gaugeSegmentStruct = object({
 const baseLovelaceCardConfig = object({
   type: string(),
   view_layout: optional(object()),
+  grid_options: optional(object()),
+  visibility: optional(object()),
+  layout_options: optional(object()),
 });
 
 const cardConfigStruct = assign(
