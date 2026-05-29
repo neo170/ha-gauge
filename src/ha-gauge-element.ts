@@ -272,7 +272,7 @@ export class HaGaugeElement extends LitElement {
       max-height: 40%;
       max-width: 55%;
       left: 50%;
-      bottom: 10%;
+      bottom: 13%;
       transform: translate(-50%, 0%);
     }
 

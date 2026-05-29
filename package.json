@@ -1,6 +1,6 @@
 {
   "name": "ha-gauge",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A HACS custom gauge card for Home Assistant – initially identical to the built-in gauge card.",
   "keywords": [
     "home-assistant",

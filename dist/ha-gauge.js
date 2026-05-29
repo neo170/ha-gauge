@@ -873,7 +873,7 @@ HaGaugeElement.styles = i$5 `
       max-height: 40%;
       max-width: 55%;
       left: 50%;
-      bottom: 10%;
+      bottom: 13%;
       transform: translate(-50%, 0%);
     }
 
@@ -1851,7 +1851,7 @@ let HaGaugeCard = class HaGaugeCard extends i$2 {
         const innerWidth = Math.max(0, card.clientWidth - paddingX);
         const innerHeight = Math.max(0, card.clientHeight - paddingY);
         const titleHeight = title?.getBoundingClientRect().height ?? 0;
-        const gaugeAvailableHeight = Math.max(36, innerHeight - titleHeight - 4);
+        const gaugeAvailableHeight = Math.max(40, innerHeight - titleHeight + 8);
         // Match the gauge SVG aspect ratio (viewBox width:100 height:55).
         const gaugeAspect = 100 / 55;
         const maxWidthByHeight = gaugeAvailableHeight * gaugeAspect;
@@ -1929,12 +1929,13 @@ HaGaugeCard.styles = i$5 `
     ha-card {
       height: 100%;
       overflow: hidden;
-      padding: var(--ha-space-3, 12px);
+      padding-inline: var(--ha-space-3, 12px);
+      padding-block: clamp(4px, 3%, var(--ha-space-3, 12px));
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      gap: 4px;
+      gap: 0;
       box-sizing: border-box;
     }
 
@@ -1959,7 +1960,7 @@ HaGaugeCard.styles = i$5 `
       width: 100%;
       font-size: var(--ha-font-size-m, 1rem);
       line-height: var(--ha-line-height-expanded, 1.5);
-      margin: -4px 0 0;
+      margin: -6px 0 0;
       text-align: center;
       box-sizing: border-box;
       overflow: hidden;
@@ -1994,7 +1995,7 @@ HaGaugeCard = __decorate([
  * Registers the card with Home Assistant's custom card registry so it appears
  * in the card picker with a proper name and preview icon.
  */
-const CARD_VERSION = "1.0.3";
+const CARD_VERSION = "1.0.4";
 // Register card with Home Assistant's custom card registry
 window.customCards =
     window.customCards || [];
