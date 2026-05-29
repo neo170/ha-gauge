@@ -1698,6 +1698,10 @@ const UNAVAILABLE = "unavailable";
 // Card element
 // ---------------------------------------------------------------------------
 let HaGaugeCard = class HaGaugeCard extends i$2 {
+    constructor() {
+        super(...arguments);
+        this._gaugeSizePx = 250;
+    }
     static async getConfigElement() {
         return document.createElement("ha-gauge-card-editor");
     }
@@ -1776,19 +1780,22 @@ let HaGaugeCard = class HaGaugeCard extends i$2 {
             ? "0"
             : undefined)}
       >
-        <ha-gauge-element
-          .min=${this._config.min}
-          .max=${this._config.max}
-          .value=${Number(value)}
-          .valueText=${valueToDisplay}
-          .locale=${this.hass.locale}
-          .label=${unit}
-          style=${o({
+        <div class="gauge-wrap">
+          <ha-gauge-element
+            .min=${this._config.min}
+            .max=${this._config.max}
+            .value=${Number(value)}
+            .valueText=${valueToDisplay}
+            .locale=${this.hass.locale}
+            .label=${unit}
+            style=${o({
             "--gauge-color": this._computeSeverity(Number(value)),
+            width: `${this._gaugeSizePx}px`,
         })}
-          .needle=${this._config.needle}
-          .levels=${this._config.needle ? this._severityLevels() : undefined}
-        ></ha-gauge-element>
+            .needle=${this._config.needle}
+            .levels=${this._config.needle ? this._severityLevels() : undefined}
+          ></ha-gauge-element>
+        </div>
         <p class="title" .title=${name}>${name}</p>
       </ha-card>
     `;
@@ -1807,6 +1814,50 @@ let HaGaugeCard = class HaGaugeCard extends i$2 {
             oldHass.themes !== this.hass.themes ||
             oldConfig.theme !== this._config.theme) {
             applyThemesOnElement(this, this.hass.themes, this._config.theme);
+        }
+        this._watchCardResize();
+        this._updateGaugeSize();
+    }
+    firstUpdated() {
+        this._watchCardResize();
+        this._updateGaugeSize();
+    }
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        this._resizeObserver?.disconnect();
+        this._resizeObserver = undefined;
+    }
+    _watchCardResize() {
+        const card = this.renderRoot?.querySelector("ha-card");
+        if (!card || this._resizeObserver) {
+            return;
+        }
+        this._resizeObserver = new ResizeObserver(() => {
+            this._updateGaugeSize();
+        });
+        this._resizeObserver.observe(card);
+    }
+    _updateGaugeSize() {
+        const card = this.renderRoot?.querySelector("ha-card");
+        if (!card) {
+            return;
+        }
+        const title = this.renderRoot?.querySelector(".title");
+        const cardStyle = getComputedStyle(card);
+        const paddingX = parseFloat(cardStyle.paddingLeft || "0") +
+            parseFloat(cardStyle.paddingRight || "0");
+        const paddingY = parseFloat(cardStyle.paddingTop || "0") +
+            parseFloat(cardStyle.paddingBottom || "0");
+        const innerWidth = Math.max(0, card.clientWidth - paddingX);
+        const innerHeight = Math.max(0, card.clientHeight - paddingY);
+        const titleHeight = title?.getBoundingClientRect().height ?? 0;
+        const gaugeAvailableHeight = Math.max(36, innerHeight - titleHeight - 4);
+        // Match the gauge SVG aspect ratio (viewBox width:100 height:55).
+        const gaugeAspect = 100 / 55;
+        const maxWidthByHeight = gaugeAvailableHeight * gaugeAspect;
+        const nextSize = Math.max(72, Math.floor(Math.min(innerWidth, maxWidthByHeight)));
+        if (Math.abs(nextSize - this._gaugeSizePx) > 1) {
+            this._gaugeSizePx = nextSize;
         }
     }
     _computeSeverity(numberValue) {
@@ -1883,6 +1934,7 @@ HaGaugeCard.styles = i$5 `
       align-items: center;
       justify-content: center;
       flex-direction: column;
+      gap: 4px;
       box-sizing: border-box;
     }
 
@@ -1892,6 +1944,15 @@ HaGaugeCard.styles = i$5 `
 
     ha-card:focus {
       outline: none;
+    }
+
+    .gauge-wrap {
+      width: 100%;
+      min-height: 0;
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .title {
@@ -1909,8 +1970,9 @@ HaGaugeCard.styles = i$5 `
     }
 
     ha-gauge-element {
-      width: 100%;
-      max-width: 250px;
+      display: block;
+      max-width: 100%;
+      flex: none;
     }
   `;
 __decorate([
@@ -1919,6 +1981,9 @@ __decorate([
 __decorate([
     r()
 ], HaGaugeCard.prototype, "_config", void 0);
+__decorate([
+    r()
+], HaGaugeCard.prototype, "_gaugeSizePx", void 0);
 HaGaugeCard = __decorate([
     t$1("ha-gauge-card")
 ], HaGaugeCard);

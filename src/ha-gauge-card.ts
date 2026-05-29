@@ -56,6 +56,8 @@ const UNAVAILABLE = "unavailable";
 
 @customElement("ha-gauge-card")
 export class HaGaugeCard extends LitElement implements LovelaceCard {
+  private _resizeObserver?: ResizeObserver;
+
   public static async getConfigElement(): Promise<LovelaceCardEditor> {
     return document.createElement("ha-gauge-card-editor") as LovelaceCardEditor;
   }
@@ -83,6 +85,7 @@ export class HaGaugeCard extends LitElement implements LovelaceCard {
 
   @property({ attribute: false }) public hass?: HomeAssistant;
   @state() private _config?: GaugeCardConfig;
+  @state() private _gaugeSizePx = 250;
 
   public getCardSize(): number {
     return 4;
@@ -173,19 +176,22 @@ export class HaGaugeCard extends LitElement implements LovelaceCard {
             : undefined
         )}
       >
-        <ha-gauge-element
-          .min=${this._config.min!}
-          .max=${this._config.max!}
-          .value=${Number(value)}
-          .valueText=${valueToDisplay}
-          .locale=${this.hass!.locale}
-          .label=${unit}
-          style=${styleMap({
-            "--gauge-color": this._computeSeverity(Number(value)),
-          })}
-          .needle=${this._config!.needle}
-          .levels=${this._config!.needle ? this._severityLevels() : undefined}
-        ></ha-gauge-element>
+        <div class="gauge-wrap">
+          <ha-gauge-element
+            .min=${this._config.min!}
+            .max=${this._config.max!}
+            .value=${Number(value)}
+            .valueText=${valueToDisplay}
+            .locale=${this.hass!.locale}
+            .label=${unit}
+            style=${styleMap({
+              "--gauge-color": this._computeSeverity(Number(value)),
+              width: `${this._gaugeSizePx}px`,
+            })}
+            .needle=${this._config!.needle}
+            .levels=${this._config!.needle ? this._severityLevels() : undefined}
+          ></ha-gauge-element>
+        </div>
         <p class="title" .title=${name}>${name}</p>
       </ha-card>
     `;
@@ -209,6 +215,64 @@ export class HaGaugeCard extends LitElement implements LovelaceCard {
       oldConfig.theme !== this._config.theme
     ) {
       applyThemesOnElement(this, this.hass.themes, this._config.theme);
+    }
+
+    this._watchCardResize();
+    this._updateGaugeSize();
+  }
+
+  protected firstUpdated(): void {
+    this._watchCardResize();
+    this._updateGaugeSize();
+  }
+
+  public disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this._resizeObserver?.disconnect();
+    this._resizeObserver = undefined;
+  }
+
+  private _watchCardResize(): void {
+    const card = this.renderRoot?.querySelector("ha-card") as HTMLElement | null;
+    if (!card || this._resizeObserver) {
+      return;
+    }
+
+    this._resizeObserver = new ResizeObserver(() => {
+      this._updateGaugeSize();
+    });
+    this._resizeObserver.observe(card);
+  }
+
+  private _updateGaugeSize(): void {
+    const card = this.renderRoot?.querySelector("ha-card") as HTMLElement | null;
+    if (!card) {
+      return;
+    }
+
+    const title = this.renderRoot?.querySelector(".title") as HTMLElement | null;
+    const cardStyle = getComputedStyle(card);
+
+    const paddingX =
+      parseFloat(cardStyle.paddingLeft || "0") +
+      parseFloat(cardStyle.paddingRight || "0");
+    const paddingY =
+      parseFloat(cardStyle.paddingTop || "0") +
+      parseFloat(cardStyle.paddingBottom || "0");
+
+    const innerWidth = Math.max(0, card.clientWidth - paddingX);
+    const innerHeight = Math.max(0, card.clientHeight - paddingY);
+    const titleHeight = title?.getBoundingClientRect().height ?? 0;
+    const gaugeAvailableHeight = Math.max(36, innerHeight - titleHeight - 4);
+
+    // Match the gauge SVG aspect ratio (viewBox width:100 height:55).
+    const gaugeAspect = 100 / 55;
+    const maxWidthByHeight = gaugeAvailableHeight * gaugeAspect;
+
+    const nextSize = Math.max(72, Math.floor(Math.min(innerWidth, maxWidthByHeight)));
+
+    if (Math.abs(nextSize - this._gaugeSizePx) > 1) {
+      this._gaugeSizePx = nextSize;
     }
   }
 
@@ -297,6 +361,7 @@ export class HaGaugeCard extends LitElement implements LovelaceCard {
       align-items: center;
       justify-content: center;
       flex-direction: column;
+      gap: 4px;
       box-sizing: border-box;
     }
 
@@ -306,6 +371,15 @@ export class HaGaugeCard extends LitElement implements LovelaceCard {
 
     ha-card:focus {
       outline: none;
+    }
+
+    .gauge-wrap {
+      width: 100%;
+      min-height: 0;
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .title {
@@ -323,8 +397,9 @@ export class HaGaugeCard extends LitElement implements LovelaceCard {
     }
 
     ha-gauge-element {
-      width: 100%;
-      max-width: 250px;
+      display: block;
+      max-width: 100%;
+      flex: none;
     }
   `;
 }
