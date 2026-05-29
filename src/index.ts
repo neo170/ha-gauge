@@ -9,7 +9,7 @@ import "./ha-gauge-card";
 import "./ha-gauge-card-editor";
 import "./ha-gauge-element";
 
-const CARD_VERSION = "1.0.4";
+const CARD_VERSION = "1.0.5";
 
 // Register card with Home Assistant's custom card registry
 (window as Window & { customCards?: Array<Record<string, unknown>> }).customCards =

@@ -356,8 +356,8 @@ export class HaGaugeCard extends LitElement implements LovelaceCard {
     ha-card {
       height: 100%;
       overflow: hidden;
-      padding-inline: var(--ha-space-3, 12px);
-      padding-block: clamp(4px, 3%, var(--ha-space-3, 12px));
+      padding-inline: calc(var(--ha-space-3, 12px) * 0.6);
+      padding-block: clamp(2px, 1.8%, calc(var(--ha-space-3, 12px) * 0.6));
       display: flex;
       align-items: center;
       justify-content: center;

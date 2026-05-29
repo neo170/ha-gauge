@@ -1929,8 +1929,8 @@ HaGaugeCard.styles = i$5 `
     ha-card {
       height: 100%;
       overflow: hidden;
-      padding-inline: var(--ha-space-3, 12px);
-      padding-block: clamp(4px, 3%, var(--ha-space-3, 12px));
+      padding-inline: calc(var(--ha-space-3, 12px) * 0.6);
+      padding-block: clamp(2px, 1.8%, calc(var(--ha-space-3, 12px) * 0.6));
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1995,7 +1995,7 @@ HaGaugeCard = __decorate([
  * Registers the card with Home Assistant's custom card registry so it appears
  * in the card picker with a proper name and preview icon.
  */
-const CARD_VERSION = "1.0.4";
+const CARD_VERSION = "1.0.5";
 // Register card with Home Assistant's custom card registry
 window.customCards =
     window.customCards || [];
