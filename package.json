@@ -1,0 +1,31 @@
+{
+  "name": "ha-gauge",
+  "version": "1.0.0",
+  "description": "A HACS custom gauge card for Home Assistant – initially identical to the built-in gauge card.",
+  "keywords": [
+    "home-assistant",
+    "hacs",
+    "lovelace",
+    "gauge",
+    "card"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c rollup.config.mjs",
+    "watch": "rollup -c rollup.config.mjs --watch",
+    "dev": "rollup -c rollup.config.mjs --watch"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "rollup": "^4.18.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.2"
+  },
+  "dependencies": {
+    "lit": "^3.1.4",
+    "memoize-one": "^6.0.0",
+    "superstruct": "^2.0.2"
+  }
+}
