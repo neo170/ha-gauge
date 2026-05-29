@@ -9,6 +9,8 @@ import "./ha-gauge-card";
 import "./ha-gauge-card-editor";
 import "./ha-gauge-element";
 
+const CARD_VERSION = "1.0.1";
+
 // Register card with Home Assistant's custom card registry
 (window as Window & { customCards?: Array<Record<string, unknown>> }).customCards =
   (window as Window & { customCards?: Array<Record<string, unknown>> }).customCards || [];
@@ -19,11 +21,12 @@ import "./ha-gauge-element";
   description:
     "A gauge card – functionally identical to the built-in gauge card, ready for visual customisation.",
   preview: true,
+  version: CARD_VERSION,
   documentationURL: "https://github.com/neo170/ha-gauge",
 });
 
 console.info(
-  "%c HA-GAUGE-CARD %c Loaded ",
+  `%c HA-GAUGE-CARD v${CARD_VERSION} %c Loaded `,
   "color: #fff; background: #3498db; font-weight: bold; padding: 2px 6px; border-radius: 3px 0 0 3px;",
   "color: #3498db; background: #ecf0f1; font-weight: bold; padding: 2px 6px; border-radius: 0 3px 3px 0;"
 );
